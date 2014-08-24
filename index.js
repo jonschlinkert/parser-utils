@@ -39,7 +39,6 @@ exports.mergeData = function (obj, props) {
 };
 
 
-
 /**
  * Extend and normalize a file object, to ensure that it
  * has the _ideal_ properties expected by the next parser.

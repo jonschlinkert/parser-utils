@@ -37,9 +37,11 @@
     "test": "mocha -R spec"
   },
   "devDependencies": {
-    "verb-tag-jscomments": ">= 0.1.4",
+    "gray-matter": "^0.4.2",
+    "mocha": "*",
+    "should": "^4.0.4",
     "verb": ">= 0.2.6",
-    "mocha": "*"
+    "verb-tag-jscomments": ">= 0.1.4"
   },
   "dependencies": {
     "lodash": "^2.4.1"
