@@ -41,7 +41,7 @@ exports.mergeData = function (obj, props) {
 
 /**
  * Extend and normalize a file object, to ensure that it
- * has the _ideal_ properties expected by the next parser.
+ * has the properties expected by the next parser.
  *
  * **Example:**
  *
@@ -53,7 +53,8 @@ exports.mergeData = function (obj, props) {
  *
  * @param  {Object} `file`
  * @param  {Object} `options`
- * @return {Object}
+ * @return {Object} Normalized file object.
+ * @api public
  */
 
 exports.extendFile = function extendFile(file, options) {
