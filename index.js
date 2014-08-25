@@ -26,10 +26,13 @@ exports.dataProps = [
 
 
 /**
- * Return an object composed only of `data` properties.
+ * Return a single  object from `locals` and `data`
+ * properties on the given object.
  *
- * @return {Object}
- * @api private
+ * @param {Object} `obj` The object with properties to merge.
+ * @param {Object} `props` You may pass an array of additional properties to merge.
+ * @return {Object} Merged object
+ * @api public
  */
 
 exports.mergeData = function (obj, props) {
@@ -51,8 +54,8 @@ exports.mergeData = function (obj, props) {
  * //=> {content: 'foo', data: {}, original: 'foo', options: {}}
  * ```
  *
- * @param  {Object} `file`
- * @param  {Object} `options`
+ * @param  {Object} `file` The file object or string to normalize.
+ * @param  {Object} `options` Options with additional properties to extend to the file object.
  * @return {Object} Normalized file object.
  * @api public
  */

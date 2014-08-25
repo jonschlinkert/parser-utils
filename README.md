@@ -14,17 +14,24 @@ npm i parser-utils --save-dev
 
 ```js
 var utils = require('parser-utils');
-console.log(utils('abc'));
-//=> ['a', 'b', 'c'];
 ```
 
 ## API
-### [.extendFile](index.js#L60)
+### [.mergeData](index.js#L38)
+
+* `obj` **{Object}**: The object with properties to merge.    
+* `props` **{Object}**: You may pass an array of additional properties to merge.    
+* `returns` **{Object}**: Merged object  
+
+Return a single  object from `locals` and `data`
+properties on the given object.
+
+### [.extendFile](index.js#L63)
 
 Extend and normalize a file object, to ensure that it has the properties expected by the next parser.
 
-* `file` **{Object}**    
-* `options` **{Object}**    
+* `file` **{Object}**: The file object or string to normalize.    
+* `options` **{Object}**: Options with additional properties to extend to the file object.    
 * `returns` **{Object}**: Normalized file object.  
 
 **Example:**
