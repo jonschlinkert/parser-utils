@@ -1,7 +1,7 @@
 {
   "name": "parser-utils",
   "description": "Utilies for parser-cache and compatible parsers.",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "homepage": "https://github.com/jonschlinkert/parser-utils",
   "author": {
     "name": "Jon Schlinkert",
