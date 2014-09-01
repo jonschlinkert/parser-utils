@@ -152,16 +152,10 @@ utils.siftKeys = function siftKeys(obj, props) {
  * @api public
  */
 
-utils.mergeData = function mergeData(obj, locals, props) {
-  if (Array.isArray(locals)) {
-    props = locals;
-    locals = {};
-  }
-
-  props = _.pick(obj, props || utils.dataProps);
-  var data = _.values(props).concat(locals);
-
-  return _.merge.apply(_, data);
+utils.mergeData = function mergeData(obj, locals) {
+  var o = _.pick(obj, utils.dataProps);
+  o.data = _.merge({}, o, locals);
+  return utils.flattenObject(o.data, 'data');
 };
 
 
@@ -223,9 +217,7 @@ utils.extendFile = function extendFile(file, options) {
     delete o.original;
   }
 
-  var locals = utils.flattenObject(opts, 'locals');
-
-  o.data = utils.mergeData(o, locals);
+  o.data = utils.mergeData(o, opts);
   return utils.siftKeys(o);
 };
 
