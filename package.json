@@ -1,7 +1,7 @@
 {
   "name": "parser-utils",
   "description": "Utilies for parser-cache and compatible parsers.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "homepage": "https://github.com/jonschlinkert/parser-utils",
   "author": {
     "name": "Jon Schlinkert",
@@ -54,7 +54,7 @@
     "mocha": "*",
     "should": "^4.0.4",
     "verb": ">= 0.2.6",
-    "verb-tag-jscomments": ">= 0.2.0"
+    "verb-tag-jscomments": "^0.2.2"
   },
   "dependencies": {
     "lodash": "^2.4.1"

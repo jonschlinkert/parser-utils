@@ -88,55 +88,11 @@ describe('parsers utils', function() {
       };
 
       var o = utils.mergeData(data);
+
       o.should.have.property('x');
       o.should.have.property('y');
       o.should.have.property('z');
       o.should.not.have.property('a');
-    });
-
-    it('should merge default and custom data properties in the given object.', function() {
-      var data = {
-        data: {x: 'x'},
-        locals: {y: 'y', z: 'z'},
-        foo: {a: 'a'}
-      };
-
-      var o = utils.mergeData(data, ['foo', 'data', 'locals']);
-      o.should.have.property('x');
-      o.should.have.property('y');
-      o.should.have.property('z');
-      o.should.have.property('a');
-    });
-
-    it('should merge data in the given order.', function() {
-      var one = {
-        data: {a: 'a'},
-        locals: {a: 'b'},
-        foo: {a: 'c'}
-      };
-
-      var a = utils.mergeData(one, ['foo']);
-      a.should.have.property('a');
-      a.a.should.equal('c');
-
-      var b = utils.mergeData(one, ['foo', 'data', 'locals']);
-      b.should.have.property('a');
-      b.a.should.equal('b');
-    });
-
-    it('should give preference to the object passed as a second param.', function() {
-      var one = {
-        data: {a: 'a'},
-        locals: {a: 'b'},
-        foo: {a: 'c'}
-      };
-
-      var a = utils.mergeData(one, {a: 'bbb'}, ['foo']);
-      a.a.should.equal('bbb');
-
-      var b = utils.mergeData(one, ['foo', 'data', 'locals']);
-      b.should.have.property('a');
-      b.a.should.equal('b');
     });
   });
 
