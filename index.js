@@ -147,15 +147,15 @@ utils.siftKeys = function siftKeys(obj, props) {
  *
  * @param  {Object} `obj` Object with data objects to merge.
  * @param  {Object} `locals` Optional object of data that should "win" over other data.
- * @param  {Array} `props` Additional properties to merge in.
+ * @param  {String} `merge` Function to use for merging data.
  * @return {Object} Object with a single `data` property.
  * @api public
  */
 
-utils.mergeData = function mergeData(obj, locals) {
+utils.mergeData = function mergeData(obj, locals, merge) {
   var o = _.pick(obj, utils.dataProps);
   o.data = _.merge({}, o, locals);
-  return utils.flattenObject(o.data, 'data');
+  return utils.flattenObject(o.data, 'data', merge);
 };
 
 
@@ -168,13 +168,18 @@ utils.mergeData = function mergeData(obj, locals) {
  *
  * @param  {Object} `obj` The object to flatten.
  * @param  {String} `key` The property to merge onto the root of the object.
+ * @param  {String} `merge` Function to use for merging data.
  * @return {Object} Object with `locals` merged into the root.
  * @api public
  */
 
-utils.flattenObject = function flattenObject(o, key) {
+utils.flattenObject = function flattenObject(o, key, merge) {
+  if (!merge) {
+    merge = _.merge;
+  }
+
   if (o.hasOwnProperty(key)) {
-    o = _.merge(o, o[key]);
+    o = merge({}, o[key], o);
     delete o[key];
   }
   return o;
@@ -218,6 +223,7 @@ utils.extendFile = function extendFile(file, options) {
   }
 
   o.data = utils.mergeData(o, opts);
+
   return utils.siftKeys(o);
 };
 
