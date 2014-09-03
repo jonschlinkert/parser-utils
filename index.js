@@ -8,6 +8,9 @@
 'use strict';
 
 var _ = require('lodash');
+var extend = _.extend;
+var merge = _.merge;
+var pick = _.pick;
 
 
 /**
@@ -53,24 +56,9 @@ utils.file = {
   path: '',
   content: '',
   orig: {},
-  data: {}
+  data: {},
+  locals: {}
 };
-
-
-/**
- * Properties to be applied to `file` objects.
- *
- *   - `data` Object of data.
- *   - `locals` Alternative to `data`
- *
- * @return {Array}
- * @api private
- */
-
-utils.dataProps = [
-  'locals',
-  'data'
-];
 
 
 /**
@@ -124,12 +112,12 @@ utils.diffKeys = function diffKeys(o, props) {
  */
 
 utils.siftKeys = function siftKeys(obj, props) {
-  obj = _.merge({}, utils.file, obj);
+  obj = merge({}, utils.file, obj);
 
   var diff = utils.diffKeys(obj, props);
-  var o = _.pick(obj, utils.fileKeys);
+  var o = pick(obj, utils.fileKeys);
 
-  o.orig = _.merge({}, o.orig, _.pick(obj, diff));
+  o.orig = merge({}, o.orig, pick(obj, diff));
   defineGetter(o.orig, 'content', function() {
     return o.content;
   });
@@ -139,25 +127,18 @@ utils.siftKeys = function siftKeys(obj, props) {
 
 
 /**
- * Return an object composed only of `data` properties. If a `locals` object
- * is supplied, properties in that object will override any properties on the
- * `data` object. If a `locals` object is defined, and/or if the `locals` object
- * has a nested `locals` property, both will be merged with the `data` property
- * on the returned object.
+ * Merge the given `prop` from `a` and `b` into `o`.
  *
- * @param  {Object} `obj` Object with data objects to merge.
- * @param  {Object} `locals` Optional object of data that should "win" over other data.
- * @param  {Function} `merge` Function to use for merging data.
- * @return {Object} Object with a single `data` property.
+ * @param  {Object} `o` The object to merge into.
+ * @param  {Object} `prop` The property to merge.
+ * @param  {Object} `a` The first object with `prop`.
+ * @param  {Object} `b` The second object with `prop`.
+ * @return {Object} Merged object.
  * @api public
  */
 
-utils.mergeData = function mergeData(obj, locals, merge) {
-  var o = _.pick(obj, utils.dataProps);
-  o.data = _.merge({}, o, locals);
-  o.data = utils.flattenObject(o.data, 'data', merge);
-  o.data = utils.flattenObject(o.data, 'locals', merge);
-  return o.data;
+utils.mergeProps = function mergeProps(o, prop, a, b) {
+  o[prop] = merge({}, a[prop], b[prop]);
 };
 
 
@@ -175,13 +156,13 @@ utils.mergeData = function mergeData(obj, locals, merge) {
  * @api public
  */
 
-utils.flattenObject = function flattenObject(o, key, merge) {
-  if (!merge) {
-    merge = _.merge;
+utils.flattenObject = function flattenObject(o, key, mergeFunction) {
+  if (!mergeFunction) {
+    mergeFunction = merge;
   }
 
   if (o.hasOwnProperty(key)) {
-    o = merge({}, o[key], o);
+    o = mergeFunction({}, o[key], o);
     delete o[key];
   }
   return o;
@@ -207,7 +188,7 @@ utils.flattenObject = function flattenObject(o, key, merge) {
  */
 
 utils.extendFile = function extendFile(file, options) {
-  var opts = _.extend({}, options);
+  var opts = extend({}, options);
   var o = {};
 
   if (!file) {
@@ -225,7 +206,12 @@ utils.extendFile = function extendFile(file, options) {
     delete o.original;
   }
 
-  o.data = utils.mergeData(o, opts, opts.merge);
+  utils.mergeProps(o, 'data', file, opts);
+  utils.mergeProps(o, 'locals', file, opts);
+
+  var otherProps = _.omit(opts, ['locals', 'data']);
+  o.locals = merge(o.locals, otherProps);
+
   return utils.siftKeys(o);
 };
 

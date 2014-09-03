@@ -53,19 +53,14 @@ describe('parsers utils', function() {
       var file = {
         foo: 'bar',
         content: 'AAA',
-        data: {
-          x: 'x'
-        },
-        locals: {
-          y: 'y',
-          z: 'z'
-        }
+        data: {x: 'x'},
+        locals: {y: 'y', z: 'z'}
       };
       var o = utils.siftKeys(file);
 
       // root
       o.should.have.property('data');
-      o.should.not.have.property('locals');
+      o.should.have.property('locals');
       o.should.not.have.property('foo');
 
       // data
@@ -73,29 +68,9 @@ describe('parsers utils', function() {
 
       // orig
       o.orig.should.have.property('content');
-      o.orig.should.have.property('locals');
       o.orig.should.have.property('foo');
     });
   });
-
-
-  describe('.mergeData()', function() {
-    it('should merge default data properties in the given object.', function() {
-      var data = {
-        data: {x: 'x'},
-        locals: {y: 'y', z: 'z'},
-        foo: {a: 'a'}
-      };
-
-      var o = utils.mergeData(data);
-
-      o.should.have.property('x');
-      o.should.have.property('y');
-      o.should.have.property('z');
-      o.should.not.have.property('a');
-    });
-  });
-
 
   describe('.extendFile()', function() {
     it('should merge default data properties in the given object.', function() {
@@ -105,9 +80,10 @@ describe('parsers utils', function() {
       var o = utils.extendFile(file, opts);
 
       o.should.have.property('data');
+      o.should.have.property('locals');
       o.data.should.have.property('x');
-      o.data.should.have.property('y');
-      o.data.should.have.property('z');
+      o.locals.should.have.property('y');
+      o.locals.should.have.property('z');
     });
 
     it('should return an object with data and content properties.', function() {
@@ -164,14 +140,15 @@ describe('parsers utils', function() {
 
     it('should move properties other than `data` and `content` over to `orig`', function() {
       var o = utils.extendFile({content: '---\ntitle: foo\n---\n'}, {a: 'a', b: 'b', c: 'c'});
+
       o.should.have.property('data');
       o.should.have.property('content');
       o.should.not.have.property('a');
       o.should.not.have.property('b');
       o.should.not.have.property('c');
-      o.data.should.have.property('a');
-      o.data.should.have.property('b');
-      o.data.should.have.property('c');
+      o.locals.should.have.property('a');
+      o.locals.should.have.property('b');
+      o.locals.should.have.property('c');
     });
 
     it('should move properties other than `data` and `content` over to `orig`', function() {
